@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style_exercicio.css">
+    <title>Exercício</title>
+
+</head>
+    <body>
+        <h1>GRUPO 1 – HTML5 SEMÂNTICO:</h1>
+        <div class="caixa_dialogo">
+            <p>O HTML SEMÂNTICO são Tags usadas para dar contexto e clareza ao código, um bom uso de semântica pode ajudar a impulsionar o número de pessoas que acessam o seu site. Você deve estar se perguntando "como"? Simples pelo método de SEO, que consiste em usar as Tags semânticas de modo a facilitar o mecanismo de busca a entender melhor o seu site e direcionando ele para as pessoas certas, por exemplo se o seu site é de móveis e você tiver um bom SEO quando alguém pesquisar "móveis perto de mim" o mecanismo de busca do Google pode colocar o seu site na primeira página fazendo com que quem pesquisou tenha mais chances de clicar no seu site.</p>
+        </div>
+
+        
+        <div class="caixa_dialogo1">
+            <h3>Exemplos de Tags Semânticas:</h3>
+            <p>
+                <b>1. &lt;header&gt;</b><br>
+                Representa o cabeçalho da página ou de uma seção.<br>
+                Normalmente contém logo, menu, título, etc.<br>
+            </p>
+
+            <p>  
+                <b>2. &lt;nav&gt;</b><br>
+                Define uma área de navegação, geralmente com links principais do site.<br>
+            </p>
+
+            <p>
+                <b>3. &lt;main&gt;</b><br>
+                Indica o conteúdo principal da página.<br>
+                Só deve existir um &lt;main&gt; por página.<br>
+            </p>
+            <p>
+                <b>4. &lt;section&gt;</b><br>
+                Usado para dividir o conteúdo em seções lógicas, geralmente com um título.<br>
+            </p>
+
+            <p>
+                <b>5. &lt;article&gt;</b><br>
+                Representa um conteúdo independente, como uma postagem, notícia ou comentário.<br>
+                Pode existir sozinho fora do contexto da página.<br>
+            </p>
+
+            <p>   
+                <b>6. &lt;aside&gt;</b><br>
+                Conteúdo complementar, como barras laterais, links extras, anúncios, etc.<br>
+            </p>
+
+            <p>
+                <b>7. &lt;footer&gt;</b><br>
+                Rodapé da página ou de uma seção.<br>
+                Contém informações finais, créditos, links adicionais.<br>
+            </p>
+            <h3>Quiz Semânticas:</h3>
+
+            <div class="caixa_dialogo1_quiz">
+                <p>Qual a Tag semântica usada como corpo do código HTML?<br></p>
+
+                <form style="margin-bottom: 15px;">
+                    <label for="texto"><b>Resposta:</b></label>
+                    <input type="text" id="texto">
+                    <button type="reset">Enviar</button>
+                </form>
+
+                <P>Qual das opções não é uma Tag semântica do HTML?<br></P>
+
+                <form>
+                    <input type="checkbox"> - &lt;header&gt;<br>
+                    <input type="checkbox"> - &lt;head&gt;<br>
+                    <input type="checkbox"> - &lt;name&gt;<br>
+                    <input type="checkbox"> - &lt;meta&gt;<br>
+                </form>
+            </div>
+        </div>
+
+        <h1>GRUPO 2 – FORMULÁRIOS:</h1>
+        <div class="caixa_dialogo">
+            <p>Em html formulários são usados para coletar informações de nome de usuário, email e senha, para depois serem usados em pesquisas, logins entre outras ações.
+               Em html se usa a Tag semântica &lt;form&gt; para abrir um formulário, que por sua vez é estruturado com Tags &lt;input&gt;, &lt;button&gt; e &lt;label&gt;.
+               O &lt;input&gt; é responsável por criar as caixas de textos onde você coloca seu email e senha no caso de um login.
+               As Tags &lt;input&gt; podem ter alguns 'types' que são os responsáveis por dizer qual o tipo de &lt;input&gt; será.
+            </p>
+        </div>
+        
+        <div class="caixa_dialogo1">
+            <h3>Exemplos de "type" para &lt;input&gt;:</h3>
+
+            <p>1. "text"<br>
+                Permite digitação livre, sem restrições.</p>
+
+            <p>2. "email"<br>
+                O mesmo que o "text", porém avisa se você não colocar '@', porque ele espera que você bote um email.</p>
+
+            <p>3. "number"<br>
+                Só permite números. Uma curiosidade, se você digitar 'e' ele aceita.</p>
+
+            <p>4. "password"<br>
+                Permite digitação livre assim como o "text", porém substitui os caracteres com '••••••'.</p>
+
+            <p>5. "checkbox"<br>
+                Como o nome sugere ela cria uma caixa de check onde pode ser '✔' ou '⏹'.</p>
+
+            <p>A Tag &lt;label&gt; é usada para associar e identificar uma descrição ao campo correspondente, por isso ela não tem "type".</p>
+
+            <p>Outra Tag usada dentro do &lt;form&gt; é o &lt;button&gt; que se usa para criar um botão.<br><br>
+            
+            <b>A Tag &lt;button&gt; tem três "types":</b><br><br>
+
+            <b>1. "button"</b><br><br>
+            Esse "type" é usado para deixar claro o propósito da Tag, não só para leitura, mas também para o computador entender que 'esse botão é do "type" button', evitando assim erros.<br><br>
+
+            <b>2. "reset"</b><br><br>
+            Como o nome diz ele reseta alguma coisa, ou seja, limpa. Por exemplo, no caso do login e senha, quando você clicar no &lt;button&gt; com o "type" "reset" ele irá apagar o que você tinha digitado.<br><br>
+
+            <b>3. "submit"<br></b><br>
+            É usado para enviar o que foi escrito, por exemplo no login (nesse caso o seu email e senha) para o 'backend', onde será feita a validação e verificação do seu login.</p>
+            
+            <h3>Quiz Formulários:</h3>
+
+            <div class="caixa_dialogo1_quiz">
+                <p>Qual o atributo usado para <b>senhas</b> no "type" do <b>&lt;input&gt;</b>?</p>
+                <form>
+                    <label for="texto1"><b>Resposta</b></label>
+                    <input type="text" id="texto1">
+                    <button type="reset">Enviar</button>
+                </form>
+            </div>
+        </div>
+
+        <h1>GRUPO 3 – TABELAS E MÍDIA:</h1>
+        
+        <div class="caixa_dialogo">
+            <p>
+                Em html podemos criar tabelas com a Tag &lt;table&gt; que tem varias Tags que se usa dentro dela, exemplos &lt;tr&gt;, &lt;th&gt;, &lt;td&gt;, &lt;caption&gt;, etc... Explicando cada uma: a &lt;table&gt; é a tabela, já o &lt;tr&gt; e o &lt;td&gt; são as linhas e células da tabela respectivamente, o &lt;th&gt; é o cabeçalho, o &lt;caption&gt; é a legenda da tabela.
+                Também tem as Tags de mídia no html, a exemplo podemos citar &lt;img&gt;, &lt;video&gt; e &lt;audio&gt;. Essas Tags tem a função de colocar mídia no seu site, por exemplo como no caso da Tag &lt;audio&gt; pode ser usado para 'audiobooks', as outras Tags como a &lt;img&gt; põe uma imagem no site, e o &lt;video&gt; um vídeo.
+            </p>
+        </div>
+
+        <div class="caixa_dialogo1">
+            
+            <h3>Quiz Tabelas e Mídia:</h3>
+            <div class="caixa_dialogo1_quiz">
+                <p>Qual a Tag usada para abrir uma tabela?</p>
+                <form>
+                    <label for="texto2"><b>Resposta</b></label>
+                    <input type="text" id="texto2">
+                    <button type="reset">Enviar</button>
+                </form>
+            </div>
+        </div>
+
+    </body>
+</html>

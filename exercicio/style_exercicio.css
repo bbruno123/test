@@ -1,0 +1,54 @@
+body {
+    display: inline-block;
+    border: 1px solid black;
+}
+
+body h1{
+    padding: 0 0 0 10px;
+    /* margin: 0px 0px 0px; */
+}
+
+.caixa_dialogo {
+    padding: 0px 10px;
+}
+
+.caixa_dialogo p {
+    border: 1px solid black;
+    width: 700px;
+    padding: 6px;
+}
+
+.caixa_dialogo1 {
+    display: inline-block;
+    /* border: 1px solid black; */
+    margin: 15px 0px 15px;
+    padding: 0px 15px 0px 10px;
+    
+}
+
+.caixa_dialogo1 p {
+    display: inline-flexbox;
+    width: 500px;
+    padding: 6px;
+    border: 1px solid black;
+    margin-bottom: 12px;
+}
+
+.caixa_dialogo1 span {
+    font-weight: bold;
+}
+
+.caixa_dialogo1_quiz {
+    border: 1px solid black;
+    padding: 0px 0px 0px 10px;
+}
+
+.caixa_dialogo1_quiz p{
+    border: none;
+    padding: 0;
+    margin: 6px 0px 6px;
+}
+
+.caixa_dialogo1_quiz form {
+    margin: 4px 0px 10px;
+}

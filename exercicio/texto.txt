@@ -1,0 +1,119 @@
+GRUPO 1 – HTML5 SEMÂNTICO:
+
+O HTML SEMÂNTICO são Tags usadas para dar contexto e clareza ao código, um bom uso de semântica pode ajudar a impulsionar o número de pessoas que acessam o seu site. Você deve estar se perguntando "como"? Simples pelo método de SEO, que consiste em usar as Tags semânticas de modo a facilitar o mecanismo de busca a entender melhor o seu site e direcionando ele para as pessoas certas, por exemplo se o seu site é de móveis e você tiver um bom SEO quando alguém pesquisar "móveis perto de mim" o mecanismo de busca do Google pode colocar o seu site na primeira página fazendo com que quem pesquisou tenha mais chances de clicar no seu site.
+
+Exemplos de Tags Semânticas:
+
+1. <header>
+Representa o cabeçalho da página ou de uma seção.
+Normalmente contém logo, menu, título, etc.
+
+2. <nav>
+Define uma área de navegação, geralmente com links principais do site.
+
+3. <main>
+Indica o conteúdo principal da página.
+Só deve existir um <main> por página.
+
+4. <section>
+Usado para dividir o conteúdo em seções lógicas, geralmente com um título.
+
+5. <article>
+Representa um conteúdo independente, como uma postagem, notícia ou comentário.
+Pode existir sozinho fora do contexto da página.
+
+6. <aside>
+Conteúdo complementar, como barras laterais, links extras, anúncios, etc.
+
+7. <footer>
+Rodapé da página ou de uma seção.
+Contém informações finais, créditos, links adicionais.
+
+Quiz Semânticas:
+
+-  Qual a Tag semântica usada como corpo do código HTML?
+
+-  Qual das opções não é uma Tag semântica do HTML?
+
+- &lt;header&gt;
+- &lt;head&gt;
+- &lt;name&gt;
+- &lt;meta&gt;
+
+
+GRUPO 2 – FORMULÁRIOS:
+
+Em html formulários são usados para coletar informações de nome de usuário, email e senha, para depois serem usados em pesquisas, logins entre outras ações. Em html se usa a Tag semântica <form> para abrir um formulário, que por sua vez é estruturado com Tags <input>, <button> e <label>. O <input> é responsável por criar as caixas de textos onde você coloca seu email e senha no caso de um login. As Tags <input> podem ter alguns 'types' que são os responsáveis por dizer qual o tipo de <input> será. Abixo está exemplos de "type" para <input>:
+
+1. "text"
+Permite digitação livre, sem restrições.
+
+2. "email"
+O mesmo que o "text", pórem avisa se você não colocar '@', porque ele espera que você bote um email.
+
+3. "number"
+Só permite números. Uma curiosidade, se você digitar 'e' ele aceita.
+
+4. "password"
+Permite digitação livre assim como o "text", porém substitui os caracteres com '••••••'.
+
+5. "checkbox"
+Como o nome sugere ela cria um caixa de check onde pode ser '✔' ou '⏹'.
+
+Outra Tag usada dentro do <form> é o <button> que se usa para cria um botão. A Tag <button> tem três "types":
+
+1. "button"
+Esse "type" é usado para deixar claro o propósito da Tag, não só para leitura mais também o computador entender que 'esse botão é do "type" button, e não de outo "type", evitando assim erros.
+
+2. "reset"
+Como o nome diz ele reseta alguma coisa ou seja limpa, por exemplo no caso do login e senha quando você clicar no <button> com o "type" "reset" ele irá apagar o que você tinha digitado.
+
+3. "Submit"
+É usando para enviar o que foi escrito por exemplo no login (nesse caso o seu email e senha) para o 'backend' onde será feito a validação e verificação do seu login.
+
+A Tag <label> é usado para associar e identificar uma descrição ao campo correspondente, por isso ela não tem "type".
+
+
+Quiz Formulários:
+
+
+GRUPO 3 – TABELAS E MÍDIA:
+
+Em html podemos criar tabelas com a Tag <table> que tem varias Tags que se usa dentro dela, exemplos <tr>, <th>, <td>, <caption>, etc... Explicando cada uma: a <table> é a tabela, já o <tr> e o <td> são as linhas e células da tabela respectivamente, o <th> é o cabeçalho, o <caption> é a legenda da tabela.
+Também tem as Tags de mídia no html, a exemplo podemos citar <img>, <video> e <audio>. Essas Tags tem a função de colocar mídia no seu site, por exemplo como no caso da Tag <audio> pode ser usado para 'audiobooks', as outras Tags como a <img> põe uma imagem no site, e o <video> um vídeo.
+
+
+Quiz Tabelas e Mídia:
+
+
+GRUPO 4 – FUNDAMENTOS DE CSS
+
+O CSS tem um papél importante ao HTML, ele é o responsável pela personalização do site, indo desde coisas mais simples, como mudar o tamnho de um texto, a sua cor, se é negrito ou itálico. Ou coisas mais importantes como por exemplo estilizar um ícone, criar formas e organizar onde as coisas vão ficar no site,
+é difícil imaginar criar um site apenas com HTML sem usar CSS. Agora vou explicar a estrutura do CSS e do que ele é feito. Vamos começar pelos "Setores": existem tês tipos de "Setores", o primeiro usa as Tags do HTML, exemplo se eu colocar 'p {}' no CSS isso quer dizer que dentro de todas as Tags <p> (que são Tags de parágrafo) em HTML terão o estilo que eu colocar dentro de 'p {}',
+o segundo são as "Classes", sua estrutura é assim, '.exemplo {}' onde diferene do primeiro tipo a "Classe" só terá efeito se for referenciada dentro de uma Tag. Vamos usar o exmeplo anterior, se quisermos que a Tag <p> tenha as propriedades da "Classe" '.exemplo {}' então temos que escrever assim '<p class="exemplo"></p>', desse jeito o que estiver dentro de <p> nesse caso terá todos os efeitos da "Classe" '.exemplo {}'.
+E por ultimo são os IDs, sua funcionalidade é identica a da "Classe" pórem ele é usado para quando queremos estilizar um elemento em específico em HTML, já quando queremos estilizar vários elementos usamos as "Classes", a estrutura do ID é assim '#exemplo {}' e para referenciar é assim '<p id="exemplo"></p>'.
+Agora vamos falar das "Propriedades", as "Propriedades" são as responsáveis por estilizar, elas vão dentro dos "Setores", alguns exemplos são 'font-size:' (para mudar o tamanho do texto), 'color:' (para mudar a cor do texto), 'background-color:' (para mudar a cor do fundo), entre outros. Eles são usados por exemplo dentro uma "Classe" assim '.exemplo {font-size: ; color: ;}'.
+Também tem os "Valores" que são usados para dar caracteristicas as "Propriedades", alguns exemplos de "Valores", 'color' pode ter o "Valor" red, blue, black,entr outros, já o 'font-size' pode ser 16px, 18px, 20px, e assim por diante. Ele é usado assim, '.exemplo {font-size: 26px; color: black;}'.
+As "Declarações" são uma única instrução que combina uma "Propriedades" e seu "Valor", usando o exemplo anterior seira assim, 'color: red;'.
+O que está entre '{}' num "Tipo" como por exemplo 'p {}', "Classe" ou "ID" é chamado de "Regras de estilo". Uma coisa legal do CSS é que você pode declarar ele direto numa Tag HTML usando o 'style=""', tipo '<h1 style="color: blue; font-size: 26px;"></h1>'.
+
+Quiz
+
+GRUPO 5 – FLEXBOX E GRID
+
+"Flexbox" e "Grid" são "Valores" da "Propriedade" "Display" no CSS e que ajudam a criar layouts do site, mas servem a propósitos diferentes. Por exemplo"Flexbox" é ideal para organizar itens em uma única dimensão (linha ou coluna) como uma caixa, sendo ótimo para layouts menores como menus de navegação. "Grid" é ideal para layouts bidimensionais (linhas e colunas), sendo mais adequado para estruturar a página inteira.
+
+Flexbox
+Unidimensional: Foca em organizar os itens em uma única direção, seja horizontal (row) ou vertical (column).
+Alinhamento e distribuição: Oferece controle sobre o alinhamento, o espaçamento e a ordem dos itens dentro de um contêiner.
+Uso comum: Ideal para componentes menores, como botões em uma barra de navegação ou itens em uma lista. 
+Grid
+Bidimensional: Permite criar layouts que funcionam em duas dimensões simultaneamente (linhas e colunas).
+Layout de página: É mais adequado para a estrutura principal de uma página inteira, como a disposição de cabeçalho, barra lateral e conteúdo.
+Controle preciso: Permite que cada item ocupe áreas específicas definidas por linhas e colunas. 
+Como usar os dois juntos
+É comum e até recomendado usar ambos os recursos em um mesmo projeto. 
+Use Grid para estruturar a página principal com um layout de linhas e colunas.
+Use Flexbox para organizar os itens dentro de uma das áreas criadas pelo Grid, como um menu de links ou os elementos dentro de um cartão.
+
+Quiz

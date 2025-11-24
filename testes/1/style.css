@@ -1,0 +1,29 @@
+.dot {
+    padding: 5px;
+    text-decoration: none;
+}
+
+#font {
+    /* width: fit-content; */
+    font-size: 20px;
+    font-weight: bolder;
+    /* border: 2px dashed black; */
+}
+
+.displayBack {
+    background-color: lightgreen;
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 2px 2px 5px grey;
+}
+
+.displayContainer {
+    background: #3b82f6;
+    color: white;
+    padding: 20px;
+    flex: 1;
+    text-align: center;
+    border-radius: 15px;
+}

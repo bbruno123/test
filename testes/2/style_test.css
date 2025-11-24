@@ -1,0 +1,42 @@
+.titles__text p{
+    font-size: larger;
+    font-weight: bold;   
+}
+
+.link__button{
+
+    background-color: lightgray;
+    border: 0.5px solid black;
+    
+    border-radius: 6px;
+    padding: 3px 8px;
+
+
+    color: black;
+    font-weight: 100;
+
+    font-size: larger;
+
+
+}
+
+.form{
+    margin: 0px 0px 0px 2px;
+}
+
+form{
+    display: inline-block;
+    margin: 20px 0px;
+    border: 1px solid black;
+    padding: 5px 2px;
+}
+
+
+td{
+    border: 1px solid black;
+}
+
+th{
+    font-size: 25px;
+    border: 1px solid black;
+}
