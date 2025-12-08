@@ -1,0 +1,35 @@
+.base {
+    color: black;
+    font-size: 26px;
+}
+
+.cor {
+    color: red;
+    font-size: 26px;
+}
+.cor1 {
+    color: orange;
+    font-size: 26px;
+}
+.cor2 {
+    color: yellow;
+    font-size: 26px;
+}
+.cor3 {
+    color: green;
+    font-size: 26px;
+}
+.cor4 {
+    color: blue;
+    font-size: 26px;
+}
+.cor5 {
+    color: indigo;
+    font-size: 26px;
+}
+.cor6 {
+    color: violet;
+    font-size: 26px;
+}
+
+
