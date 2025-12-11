@@ -56,27 +56,3 @@ document.addEventListener("keydown", (event1) => {
 
     }
 });
-
-
-// while (true) {
-//     if (tes.classList.contains("cor")) {
-//         numCor +=1;
-//         tes.classList.add()
-
-//     }
-
-// }
-
-// if (tes.classList.contains("cor")){
-//     isColor = true;
-// }
-
-// if (isColor === true){
-//     tes.classList.remove("cor");
-//     isColor = false;
-
-// }else if(isColor === false){
-//     tes.classList.add("cor");
-// }
-
-
