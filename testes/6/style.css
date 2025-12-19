@@ -3,6 +3,8 @@ body {
 
     height: 100%;
     width: 100%;
+
+    background-color: black;
 }
 
 #dvd{
@@ -13,4 +15,5 @@ body {
     font-size: 20px;
     font-weight: bold;
     text-align: center;
+    color: white;
 }

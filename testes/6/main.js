@@ -2,37 +2,23 @@ const dvd = document.getElementById("dvd");
 
 let top = 0;
 let left = 0;
-let isTopRightDown = true;
+
+let dirX = 1.3;
+let dirY = 1;
 
 setInterval(() => {
-    // console.log("oi");
-    
-    if (isTopRightDown === true){
-        top++;
-        left++;
+    top += dirY;
+    left += dirX;
 
-        dvd.style.top = `${top}%`;
-        dvd.style.left = `${left}%`;
-        
-        if (top >= 96 && left >= 95){
-            isTopRightDown = false;
-        }
-        
-    }else {
-        top -= 1;
-        left -= 1;
-        
-        
-        dvd.style.top = `${top}%`;
-        dvd.style.left = `${left}%`;
-        
-        if (top <= 0 && left <= 0){
-            isTopRightDown = true;
-
-        }
+    if (top >= 96 || top <= 0) {
+        dirY *= -1;
     }
-    console.log(top, left);
 
+    if (left >= 95 || left <= 0) {
+        dirX *= -1;
+    }
 
+    dvd.style.top = `${top}%`;
+    dvd.style.left = `${left}%`;
 
 }, 100);
