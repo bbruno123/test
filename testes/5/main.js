@@ -7,81 +7,134 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+camera.position.z = 8;
 
-let geometry = new THREE.CircleGeometry(5, 100);
-let material = new THREE.MeshBasicMaterial({color: 0xfcf803});
-let circle = new  THREE.Mesh(geometry, material);
-// scene.add(circle);
+let time = 0.01;
 
-let geometryCube = new THREE.BoxGeometry(1, 1, 1);
-let materialCube = new THREE.MeshBasicMaterial({color: 0xfcf803});
-let cube = new  THREE.Mesh(geometryCube, materialCube);
-scene.add(cube);
+const bulletGeometry = new THREE.BoxGeometry(0.5, 0.5, 1);
+const bulletMaterial = new THREE.MeshBasicMaterial({color: 0x0000ff});
+const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
 
-camera.position.z = 10;
+// bullet.position.x = 5;
+// scene.add(bullet)
 
-let i = 2;
 
-function animate() {
+window.addEventListener("keydown", (event) => {
+    if (event.key.toLowerCase() === "b" && !event.repeat){
+        shoot();
+    }
+    
+    if (event.key.toLowerCase() === "w"){
+        camera.position.z += -3;
+    }
+    
+    if (event.key.toLowerCase() === "s"){
+        camera.position.z += 3;
+    }
+    
+    if (event.key.toLowerCase() === "a" && !event.repeat){
+        camera.rotation.y += 0.2;
+        }
+        
+    if (event.key.toLowerCase() === "d" && !event.repeat){
+        camera.rotation.y += -0.2;
+    }
+});
+
+const bullets = [];
+
+function shoot(){
+    const bulletClone = bullet.clone();
+    bulletClone.position.copy(camera.position);
+    bulletClone.quaternion.copy(camera.quaternion);
+    
+    const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).normalize();
+    bulletClone.userData.velocity = direction.multiplyScalar(0.5);
+
+    scene.add(bulletClone);
+    bullets.push(bulletClone);
+    
+    console.log(bullets.length -1);
+    // bulletClone.position.add(bulletClone.userData.velocity);
+}
+
+function animate(){
     requestAnimationFrame(animate);
-    cube.rotation.y += i * 0.01;
-    cube.rotation.x += i * 0.5;
+    
+    // console.log(camera.rotation);
+    cube.rotation.y += time;
+    cube.rotation.x += time;
 
-    if (i >= 10) {
-        i = 0;
-    }
+    for (let i = bullets.length - 1; i >= 0; i--) {
+        const b = bullets[i];
 
-    if (timesTimer >= 2) {
-        cube.rotation.y = 0;
-        cube.rotation.x = 0;
-        // return;
-    }
+    b.position.add(b.userData.velocity);
+}
+
+//     if (b.position.length() > 10) {
+//         scene.remove(b);
+//         bullets.splice(i, 1);
+//     }
+// }
+    // // 1️⃣ Luz nasce na câmera
+    // light.position.copy(camera.position);
+
+    // // 2️⃣ Copia a rotação da câmera
+    // light.quaternion.copy(camera.quaternion);
+
+    // // 3️⃣ Ajusta o target para frente da luz
+    // light.target.position.copy(light.position).add(new THREE.Vector3(0, 0, -1).applyQuaternion(light.quaternion));
 
     renderer.render(scene, camera);
 }
-// animate();
 
-cube.material.color = new THREE.Color(0x00ff00);
-// renderer.render(scene, camera);
+//Cube//
+const geometryCube = new THREE.BoxGeometry(2, 2, 2);
+// const geometryCube1 = new THREE.BoxGeometry(2, 2, 1);
 
-let timer = 0;
-let timesTimer = 0;
+// const materialCube = new THREE.MeshPhongMaterial({color: 0x0000ff}); //azul
+const materialCube1 = new THREE.MeshBasicMaterial({color: 0x00ff00}); //verde
+const cube = new THREE.Mesh(geometryCube, materialCube1);
+
+// const cube1 = new THREE.Mesh(geometryCube, materialCube1);
+
+scene.add(cube);
+
+// cube.position.x = 15;
+// const offset = new THREE.Vector3(0, -15, 0);
+// const direction = new THREE.Vector3();
+
+// scene.add(cube1);
+// //Cube//
+
+// //Camera lookAt//
+// camera.position.copy(cube.position).add(offset);
+// // camera.up.set(0, 0, 1);
+// camera.lookAt(cube.position);
+// //Camera lookAt//
+
+// //Light//
+// const light = new THREE.DirectionalLight(0xFFFFFF, 10);
+// light.position.copy(camera.position);
+// scene.add(light);
+// scene.add(light.target);
+// //Light//
 
 
-const interval = setInterval(() => {
-    timer += 1;  // incrementa de 1 em 1 segundos
-    console.log(timer);
 
-    if (timer === 1) {
-        cube.material.color = new THREE.Color(0xff0000); // vermelho
-        animate();
-    }
-    if (timer === 2) {
-        cube.material.color = new THREE.Color(0x0000ff); // azul
-        animate();
-    }
-    if (timer === 3) {
-        cube.material.color = new THREE.Color(0x00ff00); // verde
-        animate();
-    }
-    if (timer === 4) {
-        cube.material.color = new THREE.Color(0x1c3036); // azul
-        animate();
-    }
-    if (timer === 5) {
-        cube.material.color = new THREE.Color(0xffa500); // laranja
-        animate();
+//Line//
+const materialLine = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
-        timesTimer += 1;
-        timer = 0; // 🔥 reinicia o loop
-    }
+const points = [];
+points.push(new THREE.Vector3(-10, 0, 0));
+points.push(new THREE.Vector3(0, -10, 0));
+points.push(new THREE.Vector3(0, 10, 0));
+points.push(new THREE.Vector3(10, 0, 0));
 
-    if (timesTimer >= 2) {
-        console.log("O loop parou.");
-        clearInterval(interval); // para o loop
+const geometryLine = new THREE.BufferGeometry().setFromPoints(points);
+const line = new THREE.Line(geometryLine, materialLine);
 
-        
+// scene.add(line);
+//Line//
 
-    }
-
-}, 1000); // 1000 ms entre cada passo
+animate();
