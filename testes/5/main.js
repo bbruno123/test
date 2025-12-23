@@ -54,8 +54,8 @@ function shoot(){
     scene.add(bulletClone);
     bullets.push(bulletClone);
     
-    console.log(bullets.length -1);
     // bulletClone.position.add(bulletClone.userData.velocity);
+    // console.log(bullets.length -1);
 }
 
 function animate(){
@@ -69,13 +69,12 @@ function animate(){
         const b = bullets[i];
 
     b.position.add(b.userData.velocity);
-}
 
-//     if (b.position.length() > 10) {
-//         scene.remove(b);
-//         bullets.splice(i, 1);
-//     }
-// }
+    if (b.position.length() > 10) {
+        scene.remove(b);
+        bullets.splice(i, 1);
+    }
+}
     // // 1️⃣ Luz nasce na câmera
     // light.position.copy(camera.position);
 
