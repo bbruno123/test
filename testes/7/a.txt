@@ -1,49 +1,32 @@
-//Shoot
-let e = false;
-let isFired = false;
+let rotateXSpeed = 0.3;
+let rotationCimaLimite = false;
+let rotationBaixoLimite = false;
 
-let shootActivate = false;
-
-const bulletSpeed = 0.2;
-
-const bulletQuaternion = new THREE.Quaternion();
-
-function shoot(){
-
-    if (shootActivate === true){
-        
-        if (e === true){
-            bullet.position.copy(player.position);
-            bulletQuaternion.copy(player.quaternion);
-            
-            scene.add(bullet);
-            isFired = true;
-        }
-        
-        const moveBullet = new THREE.Vector3(0, 0, -1);
-        moveBullet.multiplyScalar(bulletSpeed);
-        
-        if (isFired === true){
-            moveBullet.applyQuaternion(bulletQuaternion);
-        }
-        
-        bullet.position.add(moveBullet);
-
-        const posPlayer = new THREE.Vector3();
-        const posBullet = new THREE.Vector3();
-
-        player.getWorldPosition(posPlayer);
-        bullet.getWorldPosition(posBullet);
-
-        const distancePlayerBullet = posPlayer.distanceTo(posBullet);
-
-        if (distancePlayerBullet > 50){
-            scene.remove(bullet);
-        }
-
-        console.log(distancePlayerBullet);
-
-        
-        // console.log("x ", bullet.position.x - player.position.x, " z ", bullet.position.z - player.position.z);
+function rotateX(){
+    if (camera.rotation.x > 0.6){
+        rotationCimaLimite = true;
     }
+
+    if (camera.rotation.x < -0.9){
+        rotationBaixoLimite = true;
+    }
+
+    console.log(camera.rotation.x);
 }
+
+    if (event.key === "ArrowUp"){
+        if (rotationCimaLimite === !true){
+            camera.rotation.x += rotateXSpeed;
+            
+        }else{
+            camera.rotation.x = 0.59;
+        }
+    }
+    if (event.key === "ArrowDown"){
+        if (rotationBaixoLimite === !true){
+            camera.rotation.x -= rotateXSpeed;
+
+        }else{
+            camera.rotation.x = -0.8;
+        }
+    }

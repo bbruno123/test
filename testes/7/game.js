@@ -7,14 +7,16 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-
 function update(){
     requestAnimationFrame(update);
     WASD();
     shoot();
-    
+    rotateX();
     renderer.render(scene, camera);
 }
+
+const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1);
+scene.add(ambientLight);
 
 const geometryCube = new THREE.BoxGeometry(1, 1, 1);
 const materialCube = new THREE.MeshBasicMaterial({color: 0xfcba03});
@@ -29,6 +31,19 @@ const bullet = new THREE.Mesh(
     new THREE.BoxGeometry(0.25, 0.25, 0.25),
     new THREE.MeshBasicMaterial({color: 0x0400ed})
 );
+
+const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(100, 100),
+    new THREE.MeshStandardMaterial({color: 0xffff00, side: THREE.DoubleSide})
+);
+
+scene.add(ground);
+ground.rotation.x = Math.PI / 2;
+ground.position.y = -1;
+console.log(ground.position);
+
+const pointLight = new THREE.PointLight(0xFFFFFF, 5);
+bullet.add(pointLight);
 
 scene.add(player);
 player.add(camera);
@@ -72,7 +87,11 @@ function WASD(){
 
 //Bala//
 let e = false;
+
+//Velocidade de movimentação da bala
 const bulletSpeed = 0.2;
+
+//Distância para o despawn da bala
 const despawnBulletDis = 50;
 
 let bullets = [];
@@ -83,9 +102,12 @@ function createBullet(){
     const bulletClone = bullet.clone();
     bulletClone.position.copy(player.position);
 
+    //Da a rotação do player para a 'bulletClone'
     bulletClone.direction = new THREE.Vector3(0, 0, -1).applyQuaternion(player.quaternion);
 
     scene.add(bulletClone);
+
+    //Adiciona o 'bulletClone' como último lugar na lista 'bullets[]'
     bullets.push(bulletClone);
 }
 
@@ -97,27 +119,56 @@ function shoot(){
         e = false;
     }
     
+    //Cria os vetores de posição do player e da bala
     const posPlayer = new THREE.Vector3();
     const posBullet = new THREE.Vector3();
 
+    //Percorre a lista 'bullets[]' assim que ela não tiver mais vazia
     for (let i = 0; bullets.length > i; i++){
 
+        //Adicona velocida a cada bala já com a rotação certa
         bullets[i].position.add(bullets[i].direction.clone().multiplyScalar(bulletSpeed));
         
+        //Atribui a posição global do player e da bala para os vetores, 'posPlayer' e 'posBullet'
         player.getWorldPosition(posPlayer);
         bullets[i].getWorldPosition(posBullet);
 
+        //Calcula a distância do player para a bala e atribui a váriavel 'distancePlayerBullet'
         const distancePlayerBullet = posPlayer.distanceTo(posBullet);
-        console.log(distancePlayerBullet);
 
+        //Deguba 'distancePlayerBullet'
+        // console.log(distancePlayerBullet);
+
+        //Se a bala estiver a 'despawnBulletDis' de distância do player ela é removida da cena
         if (distancePlayerBullet > despawnBulletDis){
+
+            //Remove a bala da cena
             scene.remove(bullets[i]);
+
+            //Remove a bala da lista
             bullets.splice(i, 1);
         }
 
     }
 }
 //Bala//
+
+const rotateXSpeed = 0.1;
+
+let rotationCimaLimite = false;
+let rotationBaixoLimite = false;
+
+function rotateX(){
+    if (camera.rotation.x > 0.6){
+        rotationCimaLimite = true;
+    }
+
+    if (camera.rotation.x < -0.9){
+        rotationBaixoLimite = true;
+    }
+
+    console.log(camera.rotation.x);
+}
 
 window.addEventListener("keydown", (event) => {
 
@@ -144,6 +195,23 @@ window.addEventListener("keydown", (event) => {
     }
     if (event.key === "ArrowLeft"){
         player.rotation.y += rotateSpeed;
+    }
+
+    if (event.key === "ArrowUp"){
+        if (rotationCimaLimite === !true){
+            camera.rotation.x += rotateXSpeed;
+            
+        }else{
+            camera.rotation.x = 0.59;
+        }
+    }
+    if (event.key === "ArrowDown"){
+        if (rotationBaixoLimite === !true){
+            camera.rotation.x -= rotateXSpeed;
+
+        }else{
+            camera.rotation.x = -0.8;
+        }
     }
 
     //Bala
