@@ -1,0 +1,46 @@
+const newBullet = bullet.clone();
+        // Começa da posição e orientação do jogador
+        newBullet.position.copy(player.position);
+        newBullet.quaternion.copy(player.quaternion);
+        // Adiciona à cena e à lista
+        scene.add(newBullet);
+        bullets.push(newBullet);
+        // Opcional: desativar para não criar várias no mesmo frame
+        // e = false;
+    }
+    
+    // Mover cada bala usando sua própria orientação
+    for (let i = bullets.length - 1; i >= 0; i--){
+        const dir = new THREE.Vector3(0, 0, -1);
+        dir.applyQuaternion(bullets[i].quaternion);
+        dir.multiplyScalar(bulletSpeed);
+        bullets[i].position.add(dir);
+        // Remover se estiver muito longe
+        if (bullets[i].position.length() > 200){
+            scene.remove(bullets[i]);
+            bullets.splice(i, 1);
+        }
+    }
+
+
+
+
+    
+    const bulletDirection = new THREE.Vector3(0, 0, -1);
+    bulletDirection.applyQuaternion(player.quaternion);
+
+    const moveBullet = new THREE.Vector3();
+
+    moveBullet.add(bulletDirection);
+
+    moveBullet.multiplyScalar(bulletSpeed);
+    
+    if (e === true){
+        bullets.push(bullet.clone());
+    }
+    
+    for (let i = 0; i < bullets.length; i++){
+        bullets[i].position.add(moveBullet);
+    }
+
+    bullet.position.add(moveBullet);
