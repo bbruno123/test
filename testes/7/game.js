@@ -3,15 +3,29 @@ import * as THREE from 'https://unpkg.com/three@0.168.0/build/three.module.js';
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
+
+// Atualizar tamanho quando a janela redimensionar
+window.addEventListener('resize', () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+});
 
 function update(){
     requestAnimationFrame(update);
-    WASD();
-    shoot();
-    rotateX();
+
+    if (isPointerLock === true){
+        WASD();
+        shoot();
+        rotateX();
+    }
+
     renderer.render(scene, camera);
 }
 
@@ -40,7 +54,7 @@ const ground = new THREE.Mesh(
 scene.add(ground);
 ground.rotation.x = Math.PI / 2;
 ground.position.y = -1;
-console.log(ground.position);
+// console.log(ground.position);
 
 const pointLight = new THREE.PointLight(0xFFFFFF, 5);
 bullet.add(pointLight);
@@ -56,15 +70,16 @@ let s = false;
 let a = false;
 let d = false;
 
+const moveSpeed = 0.1;
+
+const forward = new THREE.Vector3(0, 0, -1);
+forward.applyQuaternion(player.quaternion);
+
+const right = new THREE.Vector3(1, 0, 0);
+right.applyQuaternion(player.quaternion);
+
 function WASD(){
     
-    const moveSpeed = 0.1;
-    
-    const forward = new THREE.Vector3(0, 0, -1);
-    forward.applyQuaternion(player.quaternion);
-    
-    const right = new THREE.Vector3(1, 0, 0);
-    right.applyQuaternion(player.quaternion);
     
     const move = new THREE.Vector3();
     
@@ -159,16 +174,96 @@ let rotationCimaLimite = false;
 let rotationBaixoLimite = false;
 
 function rotateX(){
-    if (camera.rotation.x > 0.6){
+    if (camera.rotation.x >= 0.6){
         rotationCimaLimite = true;
+
+    }else{
+        rotationCimaLimite = false;
+
     }
 
-    if (camera.rotation.x < -0.9){
+    if (camera.rotation.x <= -0.9){
         rotationBaixoLimite = true;
+        
+    }else{
+        rotationBaixoLimite = false;
+        
+    }
+    
+    // console.log(camera.rotation.x);
+}
+
+let isPointerLock = false;
+
+renderer.domElement.addEventListener("click", async () => {
+    
+    try{
+        await renderer.domElement.requestPointerLock();
+
+    } catch (e){
+        //Cancelou o lock
     }
 
-    console.log(camera.rotation.x);
-}
+});
+
+document.addEventListener("pointerlockchange", () =>{
+
+    if (document.pointerLockElement === renderer.domElement){
+        isPointerLock = true;
+
+    }else{
+        isPointerLock = false;
+    }
+
+});
+
+let mouseX = 0;
+let mouseY = 0;
+
+const screenCenter = window.innerWidth / window.innerHeight;
+console.log(screenCenter);
+
+window.addEventListener("mousemove", (event) => {
+
+    if (!isPointerLock) return;
+
+    //Rotaciona
+    let rotateSpeed = 0.001;
+
+    if (isPointerLock === true){
+
+        mouseX = event.movementX;
+        mouseY = event.movementY;
+    
+        if (rotationCimaLimite === false && rotationBaixoLimite === false){
+            camera.rotation.x -= Math.round(mouseY) * rotateSpeed;
+        }
+
+        if (rotationCimaLimite === true){
+            camera.rotation.x = 0.55;
+
+        }
+        
+        if (rotationBaixoLimite === true){
+            camera.rotation.x = -0.85;
+
+        }
+
+        player.rotation.y -= mouseX * rotateSpeed;
+
+        console.log(camera.rotation.x);
+
+    }
+
+
+    // if (rotationCimaLimite === !true){
+    //     camera.rotation.x += mouseY * rotateSpeed;
+        
+    // }else{
+    //     camera.rotation.x = 0.6;
+    // }
+
+});
 
 window.addEventListener("keydown", (event) => {
 
@@ -186,33 +281,7 @@ window.addEventListener("keydown", (event) => {
         d = true;
     }
 
-    //Rotaciona
-    let rotateSpeed = 0.3;
 
-    if (event.key === "ArrowRight"){
-    player.rotation.y -= rotateSpeed;
-        
-    }
-    if (event.key === "ArrowLeft"){
-        player.rotation.y += rotateSpeed;
-    }
-
-    if (event.key === "ArrowUp"){
-        if (rotationCimaLimite === !true){
-            camera.rotation.x += rotateXSpeed;
-            
-        }else{
-            camera.rotation.x = 0.59;
-        }
-    }
-    if (event.key === "ArrowDown"){
-        if (rotationBaixoLimite === !true){
-            camera.rotation.x -= rotateXSpeed;
-
-        }else{
-            camera.rotation.x = -0.8;
-        }
-    }
 
     //Bala
     if (event.key.toLowerCase() === "e" && !event.repeat){
