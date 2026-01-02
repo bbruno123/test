@@ -286,3 +286,43 @@ window.addEventListener('resize', () => {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
 });
+
+
+
+// Vetores reutilizados para evitar novas alocações a cada frame
+const forward = new THREE.Vector3();
+const right = new THREE.Vector3();
+
+function WASD(){
+    // Atualiza direções com a rotação atual do player
+    forward.set(0, 0, -1).applyQuaternion(player.quaternion);
+    right.set(1, 0, 0).applyQuaternion(player.quaternion);
+}
+
+
+    // Usa a direcao real da camera no mundo para evitar quaternion invertido
+    const direction = new THREE.Vector3();
+    camera.getWorldDirection(direction);
+
+  // Posiciona a bala na posicao atual da camera para sair exatamente de onde o jogador mira
+    const origin = new THREE.Vector3();
+    camera.getWorldPosition(origin);
+
+    bulletClone.position.copy(origin);
+    bulletClone.direction = direction.clone().normalize();
+
+
+    function onGround() {
+
+    const raycaster = new THREE.Raycaster();
+
+    const origin = camera.position.clone();
+    
+    const direction = new THREE.Vector3();
+    camera.getWorldDirection(direction);
+
+    raycaster.set(origin, direction);
+
+    const intersects = raycaster.intersectObjects(scene.children, true);
+    console.log(intersects);
+}
