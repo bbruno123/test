@@ -36,6 +36,32 @@ canvas {
     /* z-index: 10; */
 }
 
+#debug_ui {
+    position: absolute;
+    
+    display: flex;
+    flex-direction: column;
+    
+    top: 10px;
+    left: 10px;
+    
+    color: white;
+}
+
+/*tem que ficar acima de '#debug_ui > span'*/
+#debug_ui span {
+    padding-left: 10px;
+}
+
+#debug_ui > span {
+    background-color: rgba(136, 136, 136, 0.329);
+    
+    padding: 0px 4px 0px 1px;
+    
+    width: fit-content;
+}
+
+
 .hidden {
     visibility: hidden;
 }
