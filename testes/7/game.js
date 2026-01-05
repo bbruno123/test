@@ -17,18 +17,24 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 });
 
-//Acessa os ids 'start' e 'paused'
+//Acessa os ids 'start', 'paused' e 'game_over'
 const startText = document.getElementById("start");
 const pausedText = document.getElementById("paused");
+const game_over = document.getElementById("game_over");
 
 //Booleana para verificar quando o jogo inicializar pela primeira vez
 let startGame = false;
 
+let gameOver = false;
+
+const clock = new THREE.Clock();
+
 function update(){
-    requestAnimationFrame(update);
     
+    const deltaTime = clock.getDelta();
+
     //Verifica se o usuário clico usando o 'isPointerLock'
-    if (isPointerLock === true){
+    if (isPointerLock === true && gameOver === false){
         WASD();
         shoot();
         rotateX();
@@ -38,17 +44,26 @@ function update(){
         updateDebugUI();
         jump_();
         spawnEnemies();
+        enemiesMove(deltaTime);
+        playerUI_();
+        rotationCube();
+        cubeRGB(deltaTime);
 
+        cube_rotation.innerText = cubeRotation;
+        cube_color_RGB.innerText = cubeColorRGB;
+        
         startGame = true;
 
         //Esconde o 'pausedText'
         pausedText.classList.add("hidden");
         
+        playerHealth.innerText = `Vida: ${player.userData.health}`;
+        
     }else{
-
+        
         //Roda só uma vez antes do jogo começar pela primeira vez 
-        if (startGame === true){
-
+        if (startGame === true && gameOver === false){
+            
             //Mostra o 'startText'
             pausedText.classList.remove("hidden");  
         }
@@ -58,14 +73,26 @@ function update(){
         startText.classList.add("hidden");
     }
     
+    if (player.userData.health <= 0){
+        gameOver = true;
+        game_over.classList.remove("hidden");
+    }
+    
     // console.log(isPointerLock);
     
+    requestAnimationFrame(update);
     renderer.render(scene, camera);
 }
 
 //Menu de debug//
-const coordsElement = document.querySelector("#coords");
 const debug_ui = document.querySelector("#debug_ui");
+const coordsElement = document.querySelector("#coords");
+
+const cube_rotation = document.getElementById("cube_rotation");
+const cube_color_RGB = document.getElementById("cube_color_RGB");
+
+const playerHealth = document.getElementById("player_health");
+const playerUI = document.getElementById("player_UI");
 
 let debugAtivo = false;
 
@@ -78,12 +105,29 @@ function debugMenuStatus(){
     }
 }
 
+function playerUI_(){
+
+    if (startGame === true){
+        playerUI.classList.remove("hidden");
+    }
+
+    if (debugAtivo === true){
+        playerUI.classList.add("hidden");
+
+    }else{
+        playerUI.classList.remove("hidden");
+    }
+}
+
 //Pega as coordenadas//
 function updateDebugUI(){
     coordsElement.innerText = `x: ${player.position.x.toFixed(2)}` + " | " + `y: ${player.position.y.toFixed(2)}` + " | " + `z: ${player.position.z.toFixed(2)}`;
 }
 
-const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1);
+let cubeRotation = false;
+let cubeColorRGB = false;
+
+const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1.5);
 scene.add(ambientLight);
 
 const geometryCube = new THREE.BoxGeometry(1, 1, 1);
@@ -121,15 +165,63 @@ ground.rotation.x = Math.PI / 2;
 ground.position.y = -1;
 // console.log(ground.position);
 
-const pointLight = new THREE.PointLight(0xFFFFFF, 5);
-bullet.add(pointLight);
+//Adiciona 'PointLight' para a bala
+// const pointLight = new THREE.PointLight(0xFFFFFF, 5);
+// bullet.add(pointLight);
 
 scene.add(player);
 player.add(camera);
 
+player.userData.health = 10;
+
 scene.add(cube);
 cube.position.z = -2;
 cube.position.y = 1;
+
+//Rotação do cubo//
+let i = 0.005;
+
+function rotationCube(){
+
+    if(cubeRotation === true){
+        cube.rotation.y += i;
+        cube.rotation.x += i;
+    }
+}
+//Rotação do cubo//
+
+//Toggle cubo rgb//
+let r = 255;
+let g = 0;
+let b = 0;
+
+let rgb = "";
+const colorSpeed = 60;
+
+function cubeRGB(deltaTime){
+
+    if (cubeColorRGB === true){
+        r += deltaTime * colorSpeed;
+        // g += deltaTime * colorSpeed;
+        // b += deltaTime * colorSpeed;
+
+    }else{
+        //Não chama;
+    }
+
+    if (r > 255) r = 0;
+    if (g > 255) g = 0;
+    if (b > 255) b = 0;
+
+    const ri = Math.floor(r);
+    const gi = Math.floor(g);
+    const bi = Math.floor(b);
+
+    rgb = `rgb(${ri}, ${gi}, ${bi})`;
+
+    cube.material.color.set(rgb);
+
+};
 
 let w = false;
 let s = false;
@@ -244,7 +336,7 @@ function createBullet(){
 const posPlayer = new THREE.Vector3();
 const posBullet = new THREE.Vector3();
 
-cube.userData.health = 5;
+// cube.userData.health = 5;
 
 //Atira a bala
 function shoot(){
@@ -257,30 +349,33 @@ function shoot(){
     //Percorre a lista 'bullets[]' assim que ela não tiver mais vazia
     for (let i = 0; bullets.length > i; i++){
 
-        // Verificar colisão com o corpo (precisa de mais tiros)
-        const bodyDistance = bullets[i].position.distanceTo(cube.position);
-
-        if (bodyDistance < 1.5) {
-            scene.remove(bullets[i]);
-            cube.userData.health--;
-        }
-        if (cube.userData.health < 1){
-            scene.remove(cube);
-        }
-
         //Adicona velocida a cada bala já com a rotação certa
         bullets[i].position.add(bullets[i].direction.clone().multiplyScalar(bulletSpeed));
         
+        const hitEnemy = checkBulletEnemyCollision(bullets[i]);
+
+        if (hitEnemy !== null) {
+            hitEnemy.userData.health--;
+            
+            if (hitEnemy.userData.health < 1) {
+                scene.remove(hitEnemy);
+                hitEnemy.userData.alive = false;
+            }
+
+            scene.remove(bullets[i]);
+            bullets.splice(i, 1);
+            i--;
+
+            continue;
+            }
+
         //Atribui a posição global do player e da bala para os vetores, 'posPlayer' e 'posBullet'
         player.getWorldPosition(posPlayer);
         bullets[i].getWorldPosition(posBullet);
-
+        
         //Calcula a distância do player para a bala e atribui a váriavel 'distancePlayerBullet'
         const distancePlayerBullet = posPlayer.distanceTo(posBullet);
-
-        //Deguba 'distancePlayerBullet'
-        // console.log(distancePlayerBullet);
-
+        
         //Se a bala estiver a 'despawnBulletDis' de distância do player ela é removida da cena
         if (distancePlayerBullet > despawnBulletDis){
 
@@ -289,6 +384,9 @@ function shoot(){
 
             //Remove a bala da lista
             bullets.splice(i, 1);
+            i--;
+
+            continue;
         }
 
     }
@@ -298,67 +396,104 @@ let enemies = [];
 let enemiesSpawned = false;
 
 function spawnEnemies(){
-
-    if (enemiesSpawned === true){
-        return;
-    }
+    
+    if (enemiesSpawned === true) return;
     
     for (let i = 0; i < 15; i++){
-        const enemie = new THREE.Mesh(
+
+        const enemy = new THREE.Mesh(
             new THREE.BoxGeometry(1, 2, 1),
             new THREE.MeshBasicMaterial({color: Math.random() > 0.5 ? 0xff4444 : 0xff8844})
         )
 
+        enemy.userData.health = 3;
+        enemy.userData.alive = true;
+
         let x = 0, z = 0;
 
-        while (Math.sqrt(x*x + z*z) < 5) {
-            x = (Math.random() - 0.5) * 25;
-            z = (Math.random() - 0.5) * 25;
-        }
+        do{
+            x = (Math.random() - 0.5) * 150;
+            z = (Math.random() - 0.5) * 150;
+
+        }while (Math.sqrt(x*x + z*z) < 20) //Define a posição para spawn de inimigo longe do player
         
-        enemie.position.set(x, 0, z);
+        enemy.position.set(x, 0, z);
 
-        console.log(i);
+        // console.log(i);
 
-        scene.add(enemie);
-        enemies.push(enemie);
+        enemy.userData.attackCooldown = 0;
+
+        scene.add(enemy);
+        enemies.push(enemy);
         
     }
 
     enemiesSpawned = true;
+}
+
+const posEnemy = new THREE.Vector3();
+
+function checkBulletEnemyCollision(bullet) {
+
+    for (let j = 0; j < enemies.length; j++){
+
+        const enemy = enemies[j];
+        if (!enemy.userData.alive) continue;
+
+        bullet.getWorldPosition(posBullet);
+        enemy.getWorldPosition(posEnemy);
+
+        const distance = posBullet.distanceTo(posEnemy);
+
+        if (distance < 1.5) {
+            return enemy; // ACHOU
+        }
+    }
+
+    return null; // NÃO ACHOU
 
 }
 
-const originBullet = new THREE.Vector3();
-const forwardBullet = new THREE.Vector3();
+const enemySpeed = 2;
 
+function enemiesMove(deltaTime){
 
-function bulletRaycaster(bulletMesh){
+    if (enemiesSpawned === true){
 
+        for (let k = 0; k < enemies.length; k++){
+            const enemy = enemies[k];
 
-    // forwardBullet.set(0, 0, -1).applyQuaternion(bulletMesh.quaternion).normalize();
-    // bulletMesh.getWorldPosition(originBullet);
-    // raycaster.set(originBullet, forwardBullet);
+            const lookTarget = new THREE.Vector3();
+            lookTarget.copy(player.position);
+            lookTarget.y = 0;
 
-    // const intersects = raycaster.intersectObject(scene.getObjectByName("cube"), true);
+            enemy.lookAt(lookTarget);
 
-    // if (intersects.length > 0 && intersects[0].distance < 0.5){
+            if (!enemy.userData.alive) continue;
+            
+            // Calcula a direção do inimigo para o player
+            const directionPlayer = new THREE.Vector3();
+            directionPlayer.subVectors(player.position, enemy.position);
+            directionPlayer.y = 0; // Mantém movimento no plano horizontal
+            directionPlayer.normalize(); // Transforma em vetor unitário (comprimento = 1)
+            
+            // Move o inimigo em direção ao player
+            enemy.position.add(directionPlayer.multiplyScalar(enemySpeed * deltaTime));
 
-    //     cube.userData.health--;
+            player.getWorldPosition(posPlayer);
+            enemy.getWorldPosition(posEnemy);
 
+            const distance = posEnemy.distanceTo(posPlayer);
 
-    //     console.log("Acertou o cubo");
+            enemy.userData.attackCooldown += deltaTime * 2.5;
 
-    //     // scene.remove(cube);
-    //     // scene.remove(bullets[i]);
-    //     // bullets.splice(i, 1);
-    // }
-    
-    // return false;
-
+            if (distance < 1.5 && enemy.userData.attackCooldown >= 1){
+                player.userData.health--;
+                enemy.userData.attackCooldown = 0;
+            }
+        }
+    }
 }
-
-//Bala//
 
 const down = new THREE.Vector3(0, -1, 0);
 
@@ -384,8 +519,6 @@ function onGround() {
 
     // console.log(intersects[0].distance);
 }
-
-const rotateXSpeed = 0.1;
 
 let rotationCimaLimite = false;
 let rotationBaixoLimite = false;
@@ -495,6 +628,17 @@ window.addEventListener("keydown", (event) => {
         event.preventDefault();
         debug_ui.classList.toggle("hidden");
     }
+
+    //Toggle a rotação do cubo//
+    if (event.key === "F4" && debugAtivo === true){
+        cubeRotation = !cubeRotation;
+    }
+
+    //Toggle a cor do cubo//
+    if (event.key === "4" && debugAtivo === true){
+        cubeColorRGB = !cubeColorRGB;
+    }
+
 
     //WASD
     if (event.key.toLowerCase() === "w"){

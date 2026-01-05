@@ -61,6 +61,47 @@ canvas {
     width: fit-content;
 }
 
+#player_UI{
+    position: absolute;
+    
+    top: 10px;
+    left: 10px;
+}
+
+#player_UI p {
+    margin: 0px;
+    padding-bottom: 5px;
+
+    font-size: 20px;
+    
+    display: flex;
+    flex-direction: column;
+    
+    color: white;
+}
+
+#game_over {
+    position: absolute;
+    
+    margin: 0;
+    padding: 5px 15px;
+
+    border-radius: 25px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 25px;
+    font-weight: bolder;
+
+    color: white;
+    background-color: rgba(128, 128, 128, 0.774);
+
+    pointer-events: none; /* não bloqueia o mouse */
+    /* z-index: 10; */
+}
 
 .hidden {
     visibility: hidden;

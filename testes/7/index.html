@@ -10,10 +10,18 @@
     <body>
         <p id="start" class="">Começar</p>
         <p id="paused" class="hidden">Pausado</p>
+        <p id="game_over" class="hidden">Game Over</p>
 
         <div id="debug_ui" class="hidden">
             <span>Cords: <span id="coords"></span></span>
+            <span>cubeRotation: <span id="cube_rotation"></span></span>
+            <span>cubeColorRGB: <span id="cube_color_RGB"></span></span>
         </div>
+
+        <div id="player_UI" class="hidden">
+            <p id="player_health"></p>
+        </div>
+
     </body>
     <script type="module" src="game.js"></script>
 </html>

@@ -326,3 +326,56 @@ function WASD(){
     const intersects = raycaster.intersectObjects(scene.children, true);
     console.log(intersects);
 }
+
+let cubeAlive = true;
+
+if (cubeAlive === true){
+    // Verificar colisão com o corpo (precisa de mais tiros)
+    const bodyDistance = bullets[i].position.distanceTo(cube.position);
+
+    if (bodyDistance < 1.5) {
+
+        // console.log(cube.userData.health);
+
+        scene.remove(bullets[i]);
+        bullets.splice(i, 1);
+        i--;
+
+        cube.userData.health--;
+
+        if (cube.userData.health < 1){
+            scene.remove(cube);
+            cubeAlive = false;
+        }
+
+        continue;
+    }
+}
+
+const originBullet = new THREE.Vector3();
+const forwardBullet = new THREE.Vector3();
+
+
+function bulletRaycaster(bulletMesh){
+
+    forwardBullet.set(0, 0, -1).applyQuaternion(bulletMesh.quaternion).normalize();
+    bulletMesh.getWorldPosition(originBullet);
+
+    raycaster.set(originBullet, forwardBullet);
+
+    const intersects = raycaster.intersectObject(scene.getObjectByName("cube"), true);
+
+    if (intersects.length > 0 && intersects[0].distance < 0.5){
+
+        cube.userData.health--;
+
+        console.log("Acertou o cubo");
+
+        scene.remove(cube);
+        scene.remove(bullets[i]);
+        bullets.splice(i, 1);
+    }
+    
+    return false;
+
+}
