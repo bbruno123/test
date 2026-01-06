@@ -48,6 +48,8 @@ function update(){
         playerUI_();
         rotationCube();
         cubeRGB(deltaTime);
+        enemyShoot(deltaTime);
+        // enemyShootCooldown(deltaTime);
 
         cube_rotation.innerText = cubeRotation;
         cube_color_RGB.innerText = cubeColorRGB;
@@ -142,6 +144,12 @@ const player = new THREE.Mesh(
 
 //Cria o Mesh da Bala
 const bullet = new THREE.Mesh(
+    new THREE.BoxGeometry(0.25, 0.25, 0.25),
+    new THREE.MeshBasicMaterial({color: 0x0400ed})
+);
+
+//Cria o Mesh da Bala do Inimigo
+const enemyBullet = new THREE.Mesh(
     new THREE.BoxGeometry(0.25, 0.25, 0.25),
     new THREE.MeshBasicMaterial({color: 0x0400ed})
 );
@@ -460,8 +468,8 @@ function enemiesMove(deltaTime){
 
     if (enemiesSpawned === true){
 
-        for (let k = 0; k < enemies.length; k++){
-            const enemy = enemies[k];
+        for (let i = 0; i < enemies.length; i++){
+            const enemy = enemies[i];
 
             const lookTarget = new THREE.Vector3();
             lookTarget.copy(player.position);
@@ -491,6 +499,72 @@ function enemiesMove(deltaTime){
                 player.userData.health--;
                 enemy.userData.attackCooldown = 0;
             }
+        }
+    }
+}
+
+const enemyDirection = new THREE.Vector3();
+const enemyOrigin = new THREE.Vector3();
+
+const enemyBullets = [];
+
+function createBulletEnemy(enemy){
+
+    const bulletCloneEnemy = enemyBullet.clone();
+
+    enemy.getWorldDirection(enemyDirection);
+    enemy.getWorldPosition(enemyOrigin);
+
+    bulletCloneEnemy.position.copy(enemyOrigin);
+    bulletCloneEnemy.direction = enemyDirection.clone().normalize();
+
+    scene.add(bulletCloneEnemy);
+
+    enemyBullets.push(bulletCloneEnemy);
+}
+
+const bulletEnemySpeed = 0.1;
+
+function enemyShoot(deltaTime){
+
+    // Atualiza cooldown e cria novas balas
+    for (let i = 0; i < enemies.length; i++){
+
+        const enemy = enemies[i];
+
+        if (!enemy.userData.alive) continue;
+
+        enemy.userData.attackCooldown += deltaTime * 0.2;
+
+        if (enemy.userData.attackCooldown > 2){
+            createBulletEnemy(enemy);
+            enemy.userData.attackCooldown = 0;
+        }
+    }
+
+    // Move as balas já existentes
+    for (let i = 0; enemyBullets.length > i; i++){
+
+        enemyBullets[i].position.add(enemyBullets[i].direction.clone().multiplyScalar(bulletEnemySpeed));
+
+        //Atribui a posição global do player e da bala para os vetores, 'posPlayer' e 'posBullet'
+        player.getWorldPosition(posPlayer);
+        enemyBullets[i].getWorldPosition(posBullet);
+        
+        //Calcula a distância do player para a bala e atribui a váriavel 'distancePlayerBullet'
+        const distancePlayerBullet = posPlayer.distanceTo(posBullet);
+        
+        //Se a bala estiver a 'despawnBulletDis' de distância do player ela é removida da cena
+        if (distancePlayerBullet > despawnBulletDis){
+
+            //Remove a bala da cena
+            scene.remove(enemyBullets[i]);
+
+            //Remove a bala da lista
+            enemyBullets.splice(i, 1);
+            i--;
+
+            continue;
         }
     }
 }
