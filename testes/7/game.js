@@ -83,8 +83,7 @@ function update(){
         game_over.classList.remove("hidden");
     }
 
-    console.log(nextWaveTimer);
-    // console.log(cooldownNextWave);
+    // console.log(nextWaveTimer);
     
     // console.log(isPointerLock);
     
@@ -337,7 +336,7 @@ let bulletBool = false;
 const bulletSpeed = 0.5;
 
 //Distância para o despawn da bala
-const despawnBulletDis = 40;
+const despawnBulletDis = 80;
 
 let bullets = [];
 
@@ -448,7 +447,16 @@ function enemiesWave(deltaTime){
         if (nextWaveTimer >= cooldownNextWave){
 
             waveRound += 1;
-            qtdEnemiesSpawn += waveRound;
+            
+            
+            if (waveRound % 5 === 0){
+                qtdEnemiesSpawn += 3;
+                
+            }else{
+                //Spawna +1 inimigo a cada wave nova
+                qtdEnemiesSpawn += 1;
+            }
+
             nextWaveTimer = 0;
             enemiesSpawned = false;
             
@@ -506,6 +514,7 @@ function checkBulletEnemyCollision(bullet) {
         enemy.getWorldPosition(posEnemy);
 
         const distance = posBullet.distanceTo(posEnemy);
+        // console.log(distance);
 
         if (distance < 1.5) {
             return enemy; // ACHOU
