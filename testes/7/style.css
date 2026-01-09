@@ -62,13 +62,22 @@ canvas {
 }
 
 #player_UI{
+    margin: 0px;
     position: absolute;
     
     top: 10px;
     left: 10px;
 }
 
-#player_UI p {
+#UI {
+    margin: 0px;
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+}
+
+#player_UI p, #UI p {
     margin: 0px;
     padding-bottom: 5px;
 
