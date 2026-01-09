@@ -437,7 +437,7 @@ let waveRound = 0;
 let nextWaveTimer = 0;
 let cooldownNextWave = 4;
 
-let qtdEnemiesSpawn = 5;
+let qtdEnemiesSpawn = 1;
 
 function enemiesWave(deltaTime){
         
@@ -448,9 +448,9 @@ function enemiesWave(deltaTime){
         if (nextWaveTimer >= cooldownNextWave){
 
             waveRound += 1;
+            qtdEnemiesSpawn += waveRound;
             nextWaveTimer = 0;
             enemiesSpawned = false;
-            // qtdEnemiesSpawn += waveRound;
             
         }
     }
