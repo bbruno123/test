@@ -51,6 +51,7 @@ function update(){
         rotationCube();
         cubeRGB(deltaTime);
         enemyShoot(deltaTime);
+        obstacleSpawn();
 
         cube_rotation.innerText = cubeRotation;
         cube_color_RGB.innerText = cubeColorRGB;
@@ -344,6 +345,56 @@ function gravity(deltaTime){
     
 }
 
+let obstacles = [];
+
+let obstacleSpawned = false;
+
+const obstaclesVariations = [
+    0xff4444, // vermelho
+    // 0x44ff44, // verde
+    // 0x4444ff, // azul
+    0xffff44, // amarelo
+    // 0xff44ff, // magenta
+    // 0x44ffff, // ciano
+    0xff8844, // laranja
+    // 0x8844ff, // roxo
+    // 0x44ff88, // verde água
+];
+
+function obstacleSpawn(){
+
+    if (obstacleSpawned === true) return;
+    
+    for (let i = 0; i < 10; i++){
+
+        //Cria o Mesh do obstáculo
+        const obstacle = new THREE.Mesh(
+            new THREE.BoxGeometry(Math.floor(Math.random() * 5) + 2, Math.floor(Math.random() * 3) + 2, Math.floor(Math.random() * 2) + 2),
+            new THREE.MeshBasicMaterial({color: obstaclesVariations[Math.floor(Math.random() * obstaclesVariations.length)]})
+        );
+        
+        obstacles.push(obstacle);
+
+        obstacles[i].rotation.y = Math.floor(Math.random() * 2) * (Math.PI / 2);
+
+        let x = 0, z = 0;
+
+        do{
+            x = (Math.random() - 0.5) * 120;
+            z = (Math.random() - 0.5) * 120;
+
+        }while (Math.sqrt(x*x + z*z) < 10) //Define a posição para spawn do obstáculo longe do player
+        
+        obstacle.position.set(x, 0, z);
+
+        scene.add(obstacle);
+
+    }
+    
+    obstacleSpawned = true;
+
+}
+
 const raycaster = new THREE.Raycaster();
 const origin = new THREE.Vector3();
 
@@ -402,6 +453,7 @@ function shoot(deltaTime){
         bullets[i].position.add(bullets[i].direction.clone().multiplyScalar(bulletSpeed * deltaTime));
         
         const hitEnemy = checkBulletEnemyCollision(bullets[i]);
+        const hitObstacle = checkBulletObstacleCollision(bullets[i]);
         
         if (hitEnemy !== null) {
             hitEnemy.userData.health--;
@@ -421,6 +473,15 @@ function shoot(deltaTime){
             bullets.splice(i, 1);
             i--;
             
+            continue;
+        }
+
+        if (hitObstacle !== null){
+
+            scene.remove(bullets[i]);
+            bullets.splice(i, 1);
+            i--;
+
             continue;
         }
 
@@ -492,8 +553,6 @@ const enemiesVariations = [
     0xff8844, // laranja
     0x8844ff, // roxo
     0x44ff88, // verde água
-    0xffffff  // branco
-
 ];
 
 function spawnEnemies(){
@@ -555,6 +614,30 @@ function checkBulletEnemyCollision(bullet) {
     return null; // NÃO ACHOU
 
 }
+
+const posObstacle = new THREE.Vector3();
+
+function checkBulletObstacleCollision(bullet){
+
+    for (let j = 0; j < obstacles.length; j++){
+
+        const obstacle = obstacles[j];
+
+        bullet.getWorldPosition(posBullet);
+        obstacle.getWorldPosition(posObstacle);
+
+        const distance = posBullet.distanceTo(posObstacle);
+        // console.log(distance);
+
+        if (distance < 1.5) {
+            return obstacle; // ACHOU
+        }
+    }
+
+    return null; // NÃO ACHOU
+
+}
+
 
 const enemySpeed = 2;
 
@@ -649,6 +732,7 @@ function enemyShoot(deltaTime){
         enemyBullets[i].position.add(enemyBullets[i].direction.clone().multiplyScalar(bulletEnemySpeed));
 
         const hitPlayer = checkBulletPlayerCollision(enemyBullets[i]);
+        const hitObstacle = checkBulletObstacleCollision(enemyBullets[i]);
 
         if (hitPlayer !== null) {
             player.userData.health--;
@@ -658,7 +742,16 @@ function enemyShoot(deltaTime){
             i--;
 
             continue;
-            }
+        }
+
+        if (hitObstacle !== null){
+
+            scene.remove(enemyBullets[i]);
+            enemyBullets.splice(i, 1);
+            i--;
+
+            continue;
+        }
         
 
         //Atribui a posição global do player e da bala para os vetores, 'posPlayer' e 'posBullet'
@@ -848,6 +941,11 @@ window.addEventListener("keydown", (event) => {
     //Toggle a cor do cubo//
     if (event.key === "4" && debugAtivo === true){
         cubeColorRGB = !cubeColorRGB;
+    }
+
+    //Recarrega a página//
+    if (event.key === "p" && !event.repeat){
+        location.reload();
     }
 
 
