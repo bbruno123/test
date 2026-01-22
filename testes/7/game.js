@@ -944,10 +944,9 @@ window.addEventListener("keydown", (event) => {
     }
 
     //Recarrega a página//
-    if (event.key === "p" && !event.repeat){
+    if (event.key.toLowerCase() === "p" && !event.repeat){
         location.reload();
     }
-
 
     //WASD
     if (event.key.toLowerCase() === "w"){
